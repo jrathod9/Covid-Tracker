@@ -23,7 +23,8 @@ cur.execute('''CREATE TABLE IF NOT EXISTS patients (id integer NOT NULL UNIQUE,
 conn.commit()
 conn.close()
 
-def check_tables():		#PRINTS ALL TABLES
+#PRINTS ALL TABLES
+def check_tables():		
 	with sqlite3.connect(db) as conn:
 		cur = conn.cursor()
 		cur.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
@@ -43,5 +44,9 @@ def showTemplate(filename):
 def index():
 	return render_template('index.html')
 
+@app.route('/patient')
+def patient_form():
+    return render_template('patientform.html')
+    
 if __name__ == '__main__':
     app.run(port=5000,debug = True)
