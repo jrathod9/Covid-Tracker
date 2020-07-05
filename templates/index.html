@@ -1,10 +1,12 @@
 {% extends "components/base.html" %}
 {% block content %}
+
 <section class="section">
     <div class="container">
       <h1 class="title">
-        Covid-Tracker Dashboard
+        Covid-Tracker Dashboard 
       </h1>
+      <p class="subtitle" id="summary">(Last Updated</p>
       <hr>
       <p class="subtitle" >Summary: </p>
       <div class="container">
@@ -24,9 +26,9 @@
           </div>
       </div>
       <hr>
-      <p class="subtitle">State Wise Data:</p>
+      <p class="subtitle" id="state-wise-data">State Wise Data:</p>
       <div class="container">
-          <table class="table">
+          <table class="table is-fullwidth">
               <thead>
                   <tr>
                       <td>
@@ -60,10 +62,14 @@
 <script>
     dashboard = document.getElementById('dashboard-container')
     $( document ).ready(function() {
-
         $.getJSON("https://api.rootnet.in/covid19-in/stats/latest", function(result){
             var summary = result['data']['summary'];
             var regional = result['data']['regional'];
+            var refresh = result['lastRefreshed'].split("T");
+
+            document.getElementById('summary').innerHTML += `
+            ${refresh[0]} , ${refresh[1]} )
+            `;
             document.getElementById('total').innerHTML += `
             <div class="card">
                 <div class="card-content">
@@ -143,4 +149,7 @@
         // });
     // });
 </script>
+{% if alert %}
+       <script> window.alert("Successfully Added");</script>
+{% endif %}
 {% endblock %}

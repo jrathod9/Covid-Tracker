@@ -1,5 +1,5 @@
 from flask import Flask, flash, redirect, url_for, render_template, request, session, abort
-import datetime
+from datetime import date
 import os
 import sqlite3
 db = 'Database/db.sqlite3'
@@ -42,11 +42,28 @@ def showTemplate(filename):
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+	return render_template('index.html',alert = False)
 
 @app.route('/patient')
 def patient_form():
     return render_template('patientform.html')
-    
+
+@app.route('/addpatient', methods = ['POST'])
+def add_patient():
+    if request.method == 'POST':
+        pid = request.form['id']
+        name = request.form['name']
+        gender = request.form['gender']
+        update_date = date.today()
+        state = request.form['state']
+        reason = request.form['reason']
+        age = request.form['age']
+
+        with sqlite3.connect(db) as conn:
+            cur = conn.cursor()
+            cur.execute("INSERT INTO patients VALUES(?,?,?,?,?,?,?)",[pid,name,gender,update_date,state,reason,age])
+            conn.commit()
+    return render_template('index.html',alert = True)
+
 if __name__ == '__main__':
     app.run(port=5000,debug = True)
