@@ -1,6 +1,7 @@
 from flask import Flask, flash, redirect, url_for, render_template, request, session, abort
 from datetime import date
 import os
+from bson import json_util
 import sqlite3
 db = 'Database/db.sqlite3'
 #SAMPLE DATABASE
@@ -63,7 +64,28 @@ def add_patient():
             cur = conn.cursor()
             cur.execute("INSERT INTO patients VALUES(?,?,?,?,?,?,?)",[pid,name,gender,update_date,state,reason,age])
             conn.commit()
+
     return render_template('index.html',alert = True)
+
+@app.route('/search')
+def search():
+    return render_template('search.html')
+
+@app.route('/api/search' , methods = ['POST'])
+def search_name():
+    response = {}
+    
+    data = request.get_json()
+    name = data['name']
+    patients = []
+    with sqlite3.connect(db) as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM patients WHERE name like ?",('%'+name+'%',))
+        patients = cur.fetchall()
+    response = patients
+
+    return json_util.dumps(response)
+
 
 if __name__ == '__main__':
     app.run(port=5000,debug = True)
