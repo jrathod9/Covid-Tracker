@@ -6,6 +6,7 @@
         <title>Covid-Tracker</title>
         {% block head_main %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
         {% endblock %}
         <style>
@@ -56,8 +57,8 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                 <div class="buttons">
-                    <a class="button is-primary">
-                    <strong>Generate Patient Report</strong>
+                    <a class="button is-primary" href="/report">
+                    <strong>Generate Report</strong>
                     </a>
                     <a class="button is-light" href = "/search">
                     Search

@@ -1,0 +1,45 @@
+{% extends "components/base.html" %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <canvas id="myChart" width="100" height="100"></canvas>
+    </div>
+</section>
+<script>
+    var reason = {{reason | safe}};
+    // reason = unescape(reason);
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: ['Travel Abroad', 'Travel Within Country', 'Person to Person'],
+        datasets: [{
+            label: 'Major Reasons for the Spread',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [reason['Travel Abroad'], reason['Travel Within Country'], reason['Person to Person']]
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
+
+// var patients = {{ patients }};
+
+// for(var i = 0 ; i < {{patients}}.length;i++){
+//     console.log({{patients}}[i]);
+// }
+
+var myLineChart = new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: options
+});
+
+</script>
+{% endblock %}

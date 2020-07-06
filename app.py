@@ -1,6 +1,7 @@
 from flask import Flask, flash, redirect, url_for, render_template, request, session, abort
 from datetime import date
 import os
+from collections import Counter
 from bson import json_util
 import sqlite3
 db = 'Database/db.sqlite3'
@@ -66,6 +67,31 @@ def add_patient():
             conn.commit()
 
     return render_template('index.html',alert = True)
+
+@app.route('/report')
+def report():
+    with sqlite3.connect(db) as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM patients")
+        patients = cur.fetchall()
+        ages = {}
+        reason = {}
+        for i in range(len(patients)):
+            if patients[i][6] in ages.keys():
+                ages[patients[i][6]] += 1
+            else:
+                ages[patients[i][6]] = 1
+            # ages.append(patients[i][6])
+            if patients[i][5] in reason.keys():
+                reason[patients[i][5]] += 1
+            else:
+                reason[patients[i][5]] = 1
+        # reasonCount = Counter(reason)
+        # print(ages)
+        # print(reasonCount['hello'])
+        # ageCounter = Counter(ages)
+        
+    return render_template('report.html',age=ages,reason = reason)
 
 @app.route('/search')
 def search():
